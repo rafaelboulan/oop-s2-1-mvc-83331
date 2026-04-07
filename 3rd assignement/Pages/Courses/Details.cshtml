@@ -1,0 +1,46 @@
+﻿@page
+@model _3rd_assignement.Pages.Courses.DetailsModel
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<h1>Course Details</h1>
+
+<div>
+    <h4>Course</h4>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">Title</dt>
+        <dd class="col-sm-10">@Model.Course.Title</dd>
+
+        <dt class="col-sm-2">Credits</dt>
+        <dd class="col-sm-10">@Model.Course.Credits</dd>
+    </dl>
+</div>
+
+<hr />
+
+<!-- 🔥 ACTION SECTION -->
+<div>
+
+    @if (User.IsInRole("Student"))
+    {
+        <form method="post" asp-page-handler="RequestEnrollment">
+            <input type="hidden" name="courseId" value="@Model.Course.Id" />
+            <button type="submit" class="btn btn-primary">
+                Request Enrollment
+            </button>
+        </form>
+    }
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Institution"))
+    {
+        <a asp-page="./Edit" asp-route-id="@Model.Course.Id" class="btn btn-warning">
+            Edit
+        </a>
+    }
+
+    <a asp-page="./Index" class="btn btn-secondary">Back</a>
+</div>

@@ -1,0 +1,23 @@
+﻿@page
+@model _3rd_assignement.Pages.Enrollments.RequestModel
+
+<h2>Request Enrollment</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Course</label>
+
+        <select asp-for="CourseId" class="form-control">
+            <option value="">-- Select course --</option>
+            @foreach (var c in Model.Courses)
+            {
+                <option value="@c.Id">@c.Title</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Send Request
+    </button>
+
+</form>

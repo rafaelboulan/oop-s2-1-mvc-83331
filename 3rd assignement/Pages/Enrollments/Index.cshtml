@@ -1,0 +1,68 @@
+﻿@page
+@model _3rd_assignement.Pages.Enrollments.IndexModel
+@using _3rd_assignement.Models
+
+<h1>Enrollments</h1>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Institution"))
+{
+    <p>
+        <a asp-page="Create">Create New</a>
+    </p>
+}
+@{
+    var users = ViewData["Users"] as Dictionary<string, string>;
+}
+<table class="table">
+    <thead>
+        <tr>
+            @if (User.IsInRole("Admin") || User.IsInRole("Institution"))
+            {
+                <th>Student</th>
+            }
+            <th>Course</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Enrollments)
+        {
+            <tr>
+    @if (User.IsInRole("Admin") || User.IsInRole("Institution"))
+    {
+                    <td>@users[item.Student.UserId]</td>
+                }
+                <td>@item.Course?.Title</td>
+
+                <td>@item.Grade</td>
+
+                <td>
+                    <span class="badge
+                            @(item.Status == EnrollmentStatus.Approved ? "bg-success" :
+                                                    item.Status == EnrollmentStatus.Rejected ? "bg-danger" :
+                                                    "bg-warning")">
+                    @item.Status
+                </span>
+            </td>
+
+                <td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Institution"))
+                    {
+                        <form method="post" asp-page-handler="Approve" asp-route-id="@item.Id" style="display:inline">
+                            <button class="btn btn-success btn-sm">Approve</button>
+                        </form>
+
+                        <form method="post" asp-page-handler="Reject" asp-route-id="@item.Id" style="display:inline">
+                            <button class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+                    }
+
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
